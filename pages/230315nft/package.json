@@ -1,0 +1,9 @@
+{
+  "name": "hardhat-project",
+  "dependencies": {
+    "hardhat": "^2.13.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
