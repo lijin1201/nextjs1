@@ -8,7 +8,7 @@ contract MyNft is ERC721 {
         string mName;
         string mURI;
     }
-
+    uint256 public supply;
     Item[] public mItems;
 
     event EvtLogTk(address indexed addr, uint256 tkid, string msg1);
@@ -24,8 +24,10 @@ contract MyNft is ERC721 {
         string memory itURI
     ) public {
         uint256 newItemId = mItems.length;
+        supply = newItemId;
         mItems.push(Item(itOpt, itName, itURI));
         _mint(toAddr, newItemId);
+        
         emit EvtLogTk(toAddr, newItemId, "new tokenid");
     }
 
