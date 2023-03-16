@@ -13,9 +13,9 @@ async function init1(req:NextApiRequest, res: NextApiResponse) {
     gW3wsock.currentProvider.on("connect", async function () {
         let connectrst = "connnect success";
 
-        let sca = '0xa5216Adb7Dc4e1CCFEaf5D39714B23967D6649E4';
-        let addr1 = '0x652a9132F7517582a5998d22d5b9E2e1c3677035';
-        let addr2 = '0x652a9132F7517582a5998d22d5b9E2e1c3677035';
+        let sca = '0x0e8D810881b4bCEd52C10c5Ceb0cd9176C962F19';
+        let addr1 = '0xB4fb33522A2c6fCc63Bcec77A6b91aAd0A29cf69';
+        let addr2 = '0xB4fb33522A2c6fCc63Bcec77A6b91aAd0A29cf69';
         let abidata = JSON.parse(Fs.readFileSync('public/web3sc.abi','utf8'));
         const sct1 = new gW3wsock.eth.Contract(abidata,sca,
             {from: addr1, gas: 1500000, gasPrice: '30000000000000'});

@@ -18,6 +18,7 @@
     "axios": "^1.2.2",
     "eslint": "8.30.0",
     "eslint-config-next": "13.0.7",
+    "fs": "^0.0.1-security",
     "http-status-codes": "^2.2.0",
     "iron-session": "^6.3.1",
     "mongodb": "^4.13.0",
