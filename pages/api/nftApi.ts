@@ -11,7 +11,7 @@ export default async (req: NextApiRequest , res: NextApiResponse) => {
 }
 
 let gW3wsock: any;
-let sca = '0xCeB7aB3d62e80Be6BC664a44F9C9b00A198Ab932';
+let sca = '0x6DAC29B71cE6E2749218912d8029999bB2E29A28';
 
 async function mint(req:NextApiRequest, res: NextApiResponse) {
     gW3wsock = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'));
@@ -27,7 +27,7 @@ async function mint(req:NextApiRequest, res: NextApiResponse) {
             //1,500,000; 30,000,000,000,000
         let balanceof1 = await sct1.methods['balanceOf'](addr2).call();
         let supply = await sct1.methods['supply']().call();
-        let nftdata = await sct1.methods['addItem'](addr2,supply,'name'+supply,'URI1'+supply).send();
+        let nftdata = await sct1.methods['addItem'](addr2,supply,'name'+supply,'URI'+supply).send();
         let balanceof2 = await sct1.methods['balanceOf'](addr2).call();
         supply = await sct1.methods['supply']().call();
         res.json({ supply, connectrst, balanceof1, balanceof2, nftid:nftdata.events.Transfer.returnValues.tokenId,
@@ -51,7 +51,7 @@ async function list(req:NextApiRequest, res: NextApiResponse) {
         //     itemData.set();
         // });
         const owner = await sct1.methods['getItemOwner'](id).call();
-        res.json({ id: id, data: item.mOpt + " " + item.mName+" "+
+        res.json({ id: id, data: item.mOpt + " " + item.mName+" "+item.mURI+ " " +
             owner
         });       
     });    

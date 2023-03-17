@@ -24,7 +24,7 @@ contract MyNft is ERC721 {
         string memory itURI
     ) public {
         uint256 newItemId = mItems.length;
-        supply = newItemId;
+        supply = newItemId+1;
         mItems.push(Item(itOpt, itName, itURI));
         _mint(toAddr, newItemId);
         
