@@ -1,6 +1,8 @@
 import Web3 from 'web3'
 import { NextApiRequest, NextApiResponse } from 'next'
 import * as Fs from 'fs'
+import { useEffect, useState } from 'react';
+import  CONTACT  from '../../shared/abis/HkitNft.json'
 
 export default async (req: NextApiRequest , res: NextApiResponse) => {
     if (req.query.mint != undefined) { 
@@ -8,20 +10,34 @@ export default async (req: NextApiRequest , res: NextApiResponse) => {
     }
     if (req.query.list != undefined) { return list(req,res); }
     if (req.query.supply != undefined) { return supply(req,res); }
+    if (req.query.balance != undefined) { return balance(req,res); }
+    
 }
 
 let gW3wsock: any;
-let sca = '0x44BEEc30D0Ca41eB18f93dD4eC9E97325d8290C9';
+
+//let sca = '0x44BEEc30D0Ca41eB18f93dD4eC9E97325d8290C9';
 
 async function mint(req:NextApiRequest, res: NextApiResponse) {
+    const receiver = req.query.mint;
     gW3wsock = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'));
     gW3wsock.currentProvider.on("connect", async function () {
+
+        const networkId = await gW3wsock.eth.net.getId();
+        console.log("networkId: ",networkId);
+        console.log("CONTACT: " + CONTACT);
+        const networkData = CONTACT.networks[networkId];
+        const sca = networkData.address;
+        const abidata = CONTACT.abi;
+        
+        console.log("contact address: ",networkData.address);
+
         let connectrst = "connnect success";
         
         const accounts = await gW3wsock.eth.getAccounts();
-        let addr1 = accounts[1];
-        let addr2 = accounts[1];
-        let abidata = JSON.parse(Fs.readFileSync('public/HkitNft.abi','utf8'));
+        let addr1 = accounts[9];
+        let addr2 = accounts[receiver];
+      //  let abidata = JSON.parse(Fs.readFileSync('public/HkitNft.abi','utf8'));
         const sct1 = new gW3wsock.eth.Contract(abidata,sca,
             {from: addr1, gas: 1500000, gasPrice: '30000000000000'});
             //1,500,000; 30,000,000,000,000
@@ -38,11 +54,20 @@ async function mint(req:NextApiRequest, res: NextApiResponse) {
 async function list(req:NextApiRequest, res: NextApiResponse) {
     const id = req.query.list;
     gW3wsock = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'));
+
     gW3wsock.currentProvider.on("connect", async function () {
+
+        const networkId = await gW3wsock.eth.net.getId();
+        console.log("networkId: ",networkId);
+        console.log("CONTACT: " + CONTACT);
+        const networkData = CONTACT.networks[networkId];
+        const sca = networkData.address;
+        const abidata = CONTACT.abi;
+
         let connectrst = "connnect success";
         
         //const accounts = await gW3wsock.eth.getAccounts();
-        let abidata = JSON.parse(Fs.readFileSync('public/HkitNft.abi','utf8'));
+      //  let abidata = JSON.parse(Fs.readFileSync('public/HkitNft.abi','utf8'));
         const sct1 = new gW3wsock.eth.Contract(abidata,sca);
             //1,500,000; 30,000,000,000,000
         const item = await sct1.methods['mItems'](id).call();
@@ -59,15 +84,52 @@ async function list(req:NextApiRequest, res: NextApiResponse) {
 
 async function supply(req:NextApiRequest, res: NextApiResponse) {
     gW3wsock = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'));
+
+    
     gW3wsock.currentProvider.on("connect", async function () {
+
+        const networkId = await gW3wsock.eth.net.getId();
+        const networkData = CONTACT.networks[networkId];
+        const sca = networkData.address;
+        const abidata = CONTACT.abi;
+        console.log("networkId: ",networkId);
+        console.log("contact address: ",networkData.address);
+
+
         let connectrst = "connnect success";
         
-        const accounts = await gW3wsock.eth.getAccounts();
-        let abidata = JSON.parse(Fs.readFileSync('public/HkitNft.abi','utf8'));
+      //  const accounts = await gW3wsock.eth.getAccounts();
+      //  let abidata = JSON.parse(Fs.readFileSync('public/HkitNft.abi','utf8'));
         const sct1 = new gW3wsock.eth.Contract(abidata,sca);
             //1,500,000; 30,000,000,000,000
         const supply = await sct1.methods['supply']().call();
         res.json({ supply
+        });       
+    });    
+}
+
+
+async function balance(req:NextApiRequest, res: NextApiResponse) {
+    const sid  = Array.isArray(req.query.balance) ? req.query.balance[0] : req.query.balance;
+    const id = parseInt(sid?sid:"0");
+    gW3wsock = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'));
+
+    gW3wsock.currentProvider.on("connect", async function () {
+
+        const networkId = await gW3wsock.eth.net.getId();
+        console.log("networkId: ",networkId);
+        console.log("CONTACT: " + CONTACT);
+        const networkData = CONTACT.networks[networkId];
+        const sca = networkData.address;
+        const abidata = CONTACT.abi;
+
+        const accounts = await gW3wsock.eth.getAccounts();
+        const addr =  accounts[id];
+        
+        const sct1 = new gW3wsock.eth.Contract(abidata,sca);
+  
+        const balance1 = await sct1.methods['getItemCount'](addr).call();
+        res.json({ id: id, addr: addr, balance:balance1
         });       
     });    
 }
