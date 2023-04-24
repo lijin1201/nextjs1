@@ -9,7 +9,7 @@ import { useState } from 'react';
 const axios1 = (url: string) => Axios.get(url).then((res) => res.data);
 
 const App3 = () =>{
-  const{data, error, isLoading} = useSWR("http://localhost:3000/api/221229-user", axios1);
+  const{data, error, isLoading} = useSWR("/api/221229-user", axios1);
   const[ipt1, setipt1] = useState("");
   const[ipt2, setipt2] = useState("");
   const[ipt3, setipt3] = useState("");
@@ -47,14 +47,14 @@ const App3 = () =>{
       예약일 : <input type="date" value={ipt3} onChange={(e)=> setipt3(e.target.value)}/><br/>
       <br/>
       <button style={{color:"white", backgroundColor:"red", width:"28%"}} onClick={(e)=>{
-        Axios.get("http://localhost:3000/api/user?add="+ipt1+"&memo1="+ipt2+"&rsv1="+ipt3);
+        Axios.get("/api/user?add="+ipt1+"&memo1="+ipt2+"&rsv1="+ipt3);
         alert("input " +ipt1);
       }}>숙박예약</button><br/><br/>
 
       검색 : <input value={ipt4} onChange={(e)=> setipt4(e.target.value)}/>
 
       <button  className='buttons' onClick={(e)=>{
-        Axios.get("http://localhost:3000/user/"+ipt4);
+        Axios.get("/230116my/"+ipt4);
         alert("검색 " +ipt4);
       }}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
 
@@ -63,7 +63,7 @@ const App3 = () =>{
 
     <ol>
       {data.map((e:{id:string, 숙소:string, 예약일:String}) =>
-          {return <><li><a href={'/user/'+e.id+'?test1='+e.예약일}>id:{e.id}</a> <br/>숙소 : {e.숙소}</li> <br/></>})
+          {return <><li><a href={'/230116my/'+e.id+'?test1='+e.예약일}>id:{e.id}</a> <br/>숙소 : {e.숙소}</li> <br/></>})
       }
     </ol>   
         

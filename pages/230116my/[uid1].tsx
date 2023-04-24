@@ -13,7 +13,7 @@ const axios1 = (url: string) => Axios.get(url).then((res) => res.data);
 const App1 = () => {
   const { query: qr1 } = useRouter();
   const { data, error } = useSWR(
-    `http://localhost:3000/api/user?read=${qr1.uid1}`,
+    `/api/221229-user?read=${qr1.uid1}`,
     axios1
   );
 
