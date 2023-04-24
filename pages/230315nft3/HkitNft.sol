@@ -8,7 +8,7 @@ contract MyNft is ERC721 {
         string mName;
         string mURI;
     }
-    uint256 public supply;
+    uint256 public supply=0;
     Item[] public mItems;
 
     event EvtLogTk(address indexed addr, uint256 tkid, string msg1);
